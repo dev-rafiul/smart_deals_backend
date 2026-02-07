@@ -44,6 +44,7 @@ async function run() {
     const productCollection = db.collection('products');
 
 
+    // total products
     app.get('/products', async(req, res) => {
         const cursor = productCollection.find()
         const result = await cursor.toArray()
