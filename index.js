@@ -2,7 +2,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express') 
 const cors = require('cors');
 const app = express()
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 // connect mongodb with username + password
 const uri = "mongodb+srv://smart_deal:Inuw2fggK4hdm1g8@cluster0.3o3pwj7.mongodb.net/?appName=Cluster0";
 
@@ -24,7 +24,7 @@ app.use(express.json())
 
 
 app.get('/', (req, res) => {
-    res.send('Smart_deals Server is Running')
+    res.send("Hello World Your Server is Running")
 })
 
 
@@ -45,12 +45,15 @@ async function run() {
 
 
     // total products
+
+    // Read __ get
     app.get('/products', async(req, res) => {
         const cursor = productCollection.find()
         const result = await cursor.toArray()
         res.send(result)
     })
 
+    //Read __ get
     app.get('products/:id', async(req, res) => {
         const id = req.params.id;
         const query = {_id: new ObjectId(id)}
@@ -60,7 +63,7 @@ async function run() {
     })
 
 
-    // create 
+    // Create __ post
     app.post('/products', async(req, res) => {
         const newProduct = req.body;
         const result = await productCollection.insertOne(newProduct)
@@ -76,26 +79,50 @@ async function run() {
     //     res.send(result)
     // })
 
-    //update
+    // Update __ [patch/put]
     app.patch('/products/:id', async (req, res) => {
-        const id = req.params.id;
+        // const id = req.params.id;
+        // const query = {_id: new ObjectId(id)}
+        // const updatedProduct = req.body;
+        // const update = {
+        //     $set: {
+        //         name: updatedProduct.name,
+        //         price: updatedProduct.price
+        //     }
+        // }
+        // // const options = {}
+        // const result = await productCollection.updateOne(query, update)
+        // res.send(result)
+
+
+
+
         const updatedProduct = req.body;
-        const query = {_id: new ObjectId(id)}
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
         const update = {
             $set: {
                 name: updatedProduct.name,
                 price: updatedProduct.price
             }
         }
-        // const options = {}
         const result = await productCollection.updateOne(query, update)
         res.send(result)
+
+
     })
 
 
 
-    // delete
+    // Delete __ Delete
     app.delete('/products/:id', async (req, res) => {
+        // const id = req.params.id;
+        // const query = {_id: new ObjectId(id)}
+        // const result = await productCollection.deleteOne(query)
+        // res.send(result)
+
+
+
         const id = req.params.id;
         const query = {_id: new ObjectId(id)}
         const result = await productCollection.deleteOne(query)
@@ -128,5 +155,5 @@ run().catch(console.dir);
 
 
 app.listen(port, () => {
-    console.log('Smart Deal server was running', port)
+    console.log("Server Running On port", port)
 })
